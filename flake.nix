@@ -1,7 +1,7 @@
 {
   description = "A flake for Widelands";
 
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-20.09;
+  inputs.nixpkgs.url = "git+file:./nixpkgs?ref=nixos-unstable";
 
   outputs = { self, nixpkgs }: {
     defaultPackage.x86_64-linux =
@@ -9,24 +9,30 @@
 
       stdenv.mkDerivation rec {
         name = "widelands_sk4zuzu";
-        version = "248b10839ae0815f9c75741bcc54478e38b1e8d7";
+        version = "v1.2";
 
         src = fetchFromGitHub {
           owner = "widelands";
           repo = "widelands";
           rev = version;
-          sha256 = "sha256-ElkUAZ89Zmp7eHNV2bPuOtMGhnftLJfIH6gDJJBABvw=";
+          sha256 = "sha256-V7eappIMEQMNbf9EGQhv71Fwz0wH679ifi/qAHWwMNU=";
         };
 
         preConfigure = ''
           cmakeFlags="-DWL_INSTALL_BASEDIR=$out"
         '';
 
-        nativeBuildInputs = [ cmake curl python gettext ];
+        nativeBuildInputs = [ cmake curl gettext python3 ];
 
         buildInputs = [
-          boost libpng zlib glew lua doxygen icu
           SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf
+          asio
+          boost
+          doxygen
+          libpng lua
+          glew
+          icu
+          zlib
         ];
       };
   };
